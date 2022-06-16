@@ -57,6 +57,6 @@ class User extends Authenticatable
 
     public function member_requests()
     {
-        return $this->belongsToMany(User::class, 'member_requests');
+        return $this->belongsToMany(User::class, 'member_requests', 'referer_id', 'user_id');
     }
 }
