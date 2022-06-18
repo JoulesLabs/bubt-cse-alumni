@@ -9,8 +9,4 @@ class Candidate extends Model
 {
     use HasFactory;
 
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class, 'candidate_tags');
-    }
 }

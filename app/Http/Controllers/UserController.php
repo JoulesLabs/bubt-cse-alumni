@@ -22,6 +22,13 @@ class UserController extends Controller
     )
     {}
 
+
+    public function profile(int $id): View
+    {
+        $user = $this->user->getProfileData($id);
+        return view('app.user.profile', compact('user'));
+    }
+
     /**
      * @param $id
      * @param $status

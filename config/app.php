@@ -194,6 +194,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        \Nahid\Permit\PermitServiceProvider::class,
+        \JoulesLabs\IllumineAdmin\IllumineAdminServiceProvider::class,
 
     ],
 

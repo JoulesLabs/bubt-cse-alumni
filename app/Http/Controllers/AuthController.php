@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MsgType;
 use App\Exceptions\ModelCreateException;
+use App\Models\User;
 use App\Services\AuthService;
 use App\Services\UserService;
 use Exception;
@@ -36,7 +38,6 @@ class AuthController extends Controller
     public function register(Request $request): view|RedirectResponse
     {
 
-
         try{
             $data = $request->validate([
                 'name' => 'required',
@@ -45,39 +46,43 @@ class AuthController extends Controller
                 'mobile' => 'required|min:11',
                 'intake' => 'required|integer',
                 'shift' => 'required',
-                //'reference' => 'required|email|exists:users,email',
+                'reference' => 'required_with:reference_by' . ($request->input('reference_by') == 'email'? '|email|': '|') . 'exists:users,' . $request->input('reference_by'),
             ]);
 
             $data['status'] = 0;
 
-            $user = $this->user->createUserWithInformation($data);
+            $user = $this->user->createUserWithInformation($request);
             auth()->login($user, true);
             $users = $this->user->adminGetAllUser();
 
-            return view('dashboard', compact('users'))->with([
-                'success' => 'User registered successfully!'
-            ]);
+            return view('dashboard', compact('users'))->with(msg("User created successfully!", MsgType::success));
         }catch(Exception $exception){
-            return redirect()->back()->with([
-                'error' => $exception->getMessage() ?: 'Unable to register user!'
-            ]);
+            return redirect()->back()->withInput()->with(msg($exception->getMessage(), MsgType::error));
         }
     }
 
     /**
      * @param Request $request
-     * @return View|Factory|Application
-     * @throws ModelCreateException
      */
-    public function login(Request $request): View|Factory|Application
+    public function login(Request $request)
     {
-        $user = $this->auth->login(... $request->only(['email', 'password']));
-        auth()->login($user);
+        $data = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        $users = $this->user->adminGetAllUser();
+        $user = User::where('email', $data['email'])->first();
 
+        if(!$user) {
+            return redirect()->back()->with(msg("Email or password is incorrect!", MsgType::error));
+        }
 
-        return view('dashboard', compact('users'));
+        if (Auth::attempt($data)) {
+            return redirect()->route('dashboard');
+        }
+
+        return redirect()->back()->with(msg("Email or password is incorrect!", MsgType::error));
+
     }
 
     /**
@@ -97,9 +102,9 @@ class AuthController extends Controller
     public function profile(): View|Factory|Application
     {
         $user = Auth::user();
-        $reference = $this->user->findWithEmail($user->information->reference);
+        //$reference = $this->user->findWithEmail($user->information->reference);
 
-        return view('user.profile', compact(['user', 'reference']));
+        return view('app.user.profile', compact(['user']));
     }
 
     /**

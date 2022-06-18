@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->boolean('admin')->default(false);
             $table->tinyInteger('status')->default(0);
+            $table->foreignId('referer_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

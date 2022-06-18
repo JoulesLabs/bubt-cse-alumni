@@ -15,6 +15,10 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
+            if ($request->route()->getPrefix() == config('illumineadmin.route_prefix')) {
+                return route('admin::auth.login.page');
+            }
+
             return route('login');
         }
     }

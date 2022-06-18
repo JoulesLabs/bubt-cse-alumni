@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    @include('partials.head')
+    @include('app.partials.head')
 </head>
 
 <body>
 <div class="wrapper">
-    @include('partials.nav')
+    @include('app.partials.nav')
 
     <div class="main">
-        @include('partials.top')
+        @include('app.partials.top')
 
         <section style="background-color: #eee;">
             <div class="container py-5">
@@ -85,24 +85,24 @@
                                     </div>
                                 </div>
                                 @if(Auth::user()->admin == 1)
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Mobile</p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Mobile</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">{{$user?->mobile}}</p>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">{{$user?->mobile}}</p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <p class="mb-0">Address</p>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <p class="text-muted mb-0">{{$user->information->lives}}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0">Address</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">{{$user->information->lives}}</p>
-                                    </div>
-                                </div>
                                 @endif
                             </div>
                         </div>
@@ -189,11 +189,11 @@
             </div>
         </section>
 
-        @include('partials.footer')
+        @include('app.partials.footer')
     </div>
 </div>
 
-@include('partials.scripts')
+@include('app.partials.scripts')
 
 </body>
 

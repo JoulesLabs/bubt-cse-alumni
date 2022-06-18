@@ -4,10 +4,13 @@ namespace App\Services;
 
 use App\Exceptions\ModelCreateException;
 use App\Models\Information;
+use App\Models\MemberRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +21,9 @@ class UserService extends Service
      * @param $id
      * @return User
      */
-    public function find($id): User
+    public function getProfileData($id): Model
     {
-        return User::find($id);
+        return User::with('tags', 'information')->find($id);
     }
 
     /**
@@ -68,18 +71,27 @@ class UserService extends Service
      * @return mixed
      * @throws Exception
      */
-    public function createUserWithInformation($data): User
+    public function createUserWithInformation(Request $request): User
     {
+        $reference = User::where($request->input('reference_by'), $request->input('reference'))->firstOrFail();
+        $data = $request->except('reference_by', 'reference', '_token');
+        $data['reference_id'] = $reference->id;
+
         try {
             DB::beginTransaction();
 
             $user = $this->create($data);
 
             $user->information()->create(Arr::only($data,[
-                'reference',
                 'intake',
                 'shift',
             ]));
+
+            MemberRequest::query()->create([
+                'user_id' => $user->id,
+                'referer_id' => $reference->id,
+                'status' => 0,
+            ]);
 
             DB::commit();
 

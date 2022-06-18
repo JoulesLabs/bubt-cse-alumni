@@ -30,6 +30,8 @@ class AuthService extends Service
     {
         $user = $this->user->findWithEmail($email);
 
+
+
         if (!Hash::check($password, $user->password)) return null;
 
         return $user;

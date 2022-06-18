@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasOne(Information::class);
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'user_tags');
+    }
+
     public function member_requests()
     {
         return $this->belongsToMany(User::class, 'member_requests', 'referer_id', 'user_id');
