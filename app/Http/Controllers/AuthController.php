@@ -101,10 +101,10 @@ class AuthController extends Controller
      */
     public function profile(): View|Factory|Application
     {
-        $user = Auth::user();
+        $user = auth_user()->load('information.company', 'tags');
         //$reference = $this->user->findWithEmail($user->information->reference);
 
-        return view('app.user.profile', compact(['user']));
+        return view('app.auth.profile', compact(['user']));
     }
 
     /**

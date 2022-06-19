@@ -1,5 +1,7 @@
 @extends('app.layouts.main')
 
+@section('heading', 'Profile')
+@section('sub_heading', $user->name)
 @section('contents')
     <div class="row">
         <div class="col-md-4 col-xl-3">
@@ -9,14 +11,20 @@
                 </div>
                 <div class="card-body text-center">
                     <img
-                        src="img/avatars/avatar-4.jpg"
+                        src="{{ $user->avatar }}"
                         alt="Christina Mason"
                         class="img-fluid rounded-circle mb-2"
                         width="128"
                         height="128"
                     />
-                    <h5 class="card-title mb-0">{{ $user->name }}</h5>
-                    <div class="text-muted mb-2">{{ $user->information->current_job_designation ?? '' }}</div>
+                    <h5 class="mb-0">{{ $user->name }}</h5>
+                    <div class="text-muted mb-2">
+                        <i>
+                            {{ $user->information->designation ?? '' }}</i>
+                        <a href="{{ $user->information->company?->website ?? '#' }}" target="_blank">
+                            {{ $user->information->company?->name ? ', ' . $user->information->company?->name : '' }}
+                        </a>
+                    </div>
 
                     <div>
                         <a class="btn btn-primary btn-sm" href="#">Follow</a>
@@ -39,37 +47,37 @@
                     <ul class="list-unstyled mb-0">
                         <li class="mb-1">
                         <span
-                            data-feather="home"
-                            class="feather-sm me-1"
-                        ></span>
-                            Lives in <a href="#">San Francisco, SA</a>
-                        </li>
-
-                        <li class="mb-1">
-                        <span
                             data-feather="briefcase"
                             class="feather-sm me-1"
                         ></span>
-                            Works at <a href="#">GitHub</a>
+                            {{ $user->information->alumni_role ?? \App\Enums\AlumniRole::member }}
                         </li>
                         <li class="mb-1">
                         <span
-                            data-feather="map-pin"
+                            data-feather="home"
                             class="feather-sm me-1"
                         ></span>
-                            From <a href="#">Boston</a>
+                            Lives in <a href="#">{{ $user->information->lives }}</a>
                         </li>
                     </ul>
                 </div>
                 <hr class="my-0" />
                 <div class="card-body">
-                    <h5 class="h6 card-title">Elsewhere</h5>
+                    <h5 class="h6 card-title">Social Links</h5>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-1"><a href="#">staciehall.co</a></li>
-                        <li class="mb-1"><a href="#">Twitter</a></li>
-                        <li class="mb-1"><a href="#">Facebook</a></li>
-                        <li class="mb-1"><a href="#">Instagram</a></li>
-                        <li class="mb-1"><a href="#">LinkedIn</a></li>
+                        @if($user->information->facebook)
+                        <li class="mb-1">
+                            <span data-feather="facebook" class="feather-sm me-1"></span>
+                            <a target="_blank" href="{{ $user->information->facebook }}">Facebook</a>
+                        </li>
+                        @endif
+                        @if($user->information->linkedin)
+                        <li class="mb-1">
+                            <span data-feather="linkedin" class="feather-sm me-1"></span>
+                            <a target="_blank" href="{{ $user->information->linkedin }}">LinkedIn</a>
+                        </li>
+                        @endif
+
                     </ul>
                 </div>
             </div>

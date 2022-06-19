@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AlumniRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,7 +22,8 @@ return new class extends Migration
             $table->integer('passing_year')->nullable();
             $table->string('university_id')->nullable();
             $table->string('designation', 50)->nullable();
-            $table->foreignId('organization_id')->nullable();
+            $table->string('alumni_role')->default(AlumniRole::member);
+            $table->foreignId('company_id')->nullable();
             $table->string('lives', 50)->nullable();
             $table->string('facebook', 100)->nullable();
             $table->string('linkedin', 100)->nullable();

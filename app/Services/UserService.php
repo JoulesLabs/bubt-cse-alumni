@@ -23,7 +23,7 @@ class UserService extends Service
      */
     public function getProfileData($id): Model
     {
-        return User::with('tags', 'information')->find($id);
+        return User::with('tags', 'information.company')->find($id);
     }
 
     /**

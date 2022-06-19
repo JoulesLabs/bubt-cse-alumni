@@ -7,7 +7,7 @@ use App\Services\UserService;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/t', function () {
-    dd(auth_admin()->getAbilities());
+    dd(\App\Enums\MsgType::from('success')->name);
 });
 Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
 
