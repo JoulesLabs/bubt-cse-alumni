@@ -15,12 +15,11 @@ class Information extends Model
         'shift',
         'passing_year',
         'university_id',
-        'current_job_designation',
-        'current_company',
+        'designation',
+        'company_id',
         'lives',
         'facebook',
         'linkedin',
-        'github',
     ];
 
     public function User()

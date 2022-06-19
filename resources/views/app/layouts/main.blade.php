@@ -11,7 +11,7 @@
 
     <div class="main">
         @include('app.partials.top')
-
+        @include('app.components.flash-message')
         <main class="content">
             <div class="container-fluid p-0">
                 <div class="mb-3">

@@ -14,6 +14,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -104,7 +105,7 @@ class AuthController extends Controller
         $user = auth_user()->load('information.company', 'tags');
         //$reference = $this->user->findWithEmail($user->information->reference);
 
-        return view('app.auth.profile', compact(['user']));
+        return view('app.auth.profile', compact('user'));
     }
 
     /**
@@ -125,6 +126,92 @@ class AuthController extends Controller
         $reference = $this->user->findWithEmail($user->information->reference);
 
         return view('guest.profile', compact(['user', 'reference']));
+    }
+
+    public function updatePersonalInfo(Request $request)
+    {
+        try {
+            $data = $this->validate($request, [
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email,' . auth_user()->id,
+                'mobile' => 'required|min:11',
+            ]);
+
+            $user = auth_user();
+
+            $user->fill($data);
+            $user->save();
+        } catch (Exception $exception) {
+            return redirect()->back()->withInput()->with(msg($exception->getMessage(), MsgType::error));
+        }
+
+        return redirect()->back()->with(msg("Personal info updated successfully!"));
+    }
+
+    public function changePassword(Request $request)
+    {
+        try {
+            $data = $this->validate($request, [
+                'old_password' => 'required',
+                'password' => 'required|confirmed',
+            ]);
+
+            $user = auth_user();
+
+            if (Hash::check($data['old_password'], $user->password)) {
+                $user->password = $data['password'];
+                $user->save();
+            } else {
+                throw new Exception("Old password is incorrect!");
+            }
+        } catch (Exception $exception) {
+            return redirect()->back()->withInput()->with(msg($exception->getMessage(), MsgType::error));
+        }
+
+        return redirect()->back()->with(msg("Password updated successfully!"));
+
+    }
+
+    public function updateProfessionalInfo(Request $request)
+    {
+        try {
+            $data = $this->validate($request, [
+                'company' => 'required|numeric',
+                'designation' => 'required',
+                'skills' => 'required|array',
+            ]);
+
+            $data['company_id'] = $data['company'];
+
+            $user = auth_user();
+            $user->information->fill($data);
+            $user->information->save();
+            $user->tags()->sync($data['skills'] ?? []);
+        } catch (Exception $exception) {
+            return redirect()->back()->withInput()->with(msg($exception->getMessage(), MsgType::error));
+        }
+
+        return redirect()->back()->with(msg("Professional info updated successfully!"));
+    }
+
+    public function updateContacts(Request $request)
+    {
+        try {
+            $data = $this->validate($request, [
+                'lives' => 'nullable',
+                'facebook' => 'nullable|url',
+                'linkedin' => 'nullable|url',
+            ]);
+
+            $information = auth_user()->load('information')->information;
+
+            $information->fill($data);
+            $information->save();
+        } catch (Exception $exception) {
+            return redirect()->back()->withInput()->with(msg($exception->getMessage(), MsgType::error));
+        }
+
+        return redirect()->back()->with(msg("Contact info updated successfully!"));
     }
 
 

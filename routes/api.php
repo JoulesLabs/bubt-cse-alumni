@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/companies', [\App\Http\Controllers\Api\MiscController::class, 'getCompanies'])->name('api:companies');
+Route::get('/tags', [\App\Http\Controllers\Api\MiscController::class, 'getTags'])->name('api:tags');

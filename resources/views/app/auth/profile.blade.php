@@ -85,7 +85,7 @@
 
         <div class="col-md-8 col-xl-9">
             <!-- Personal Information -->
-            <form action="">
+            <form action="{{ route('profile.personal') }}" method="post">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Personal Information</h5>
@@ -93,33 +93,34 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="name" class="form-label">Name</label>
-                            <input name="name" id="name" type="text" class="form-control" placeholder="Name">
+                            <input name="name" id="name" value="{{ old('name', $user->name) }}" type="text" class="form-control" placeholder="Name">
                         </div>
                         <div class="form-group">
                             <label for="email" class="form-label">Email</label>
-                            <input name="email" id="email" type="text" class="form-control" placeholder="Email">
+                            <input name="email" id="email" value="{{ old('email', $user->email) }}" type="text" class="form-control" placeholder="Email">
                         </div>
                         <div class="form-group">
                             <label for="mobile" class="form-label">Mobile</label>
-                            <input name="mobile" id="mobile" type="text" class="form-control" placeholder="Mobile">
+                            <input name="mobile" id="mobile" value="{{ old('mobile', $user->mobile) }}" type="text" class="form-control" placeholder="Mobile">
                         </div>
                     </div>
                     <div class="card-footer">
+                        @csrf
                         <button type="submit" class="card-primary btn btn-primary right">Save</button>
                     </div>
                 </div>
             </form>
 
             <!-- Change Password -->
-            <form action="">
+            <form action="{{ route('profile.password') }}" method="post">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Change Password</h5>
                     </div>
                     <div class="card-body">
                             <div class="form-group">
-                                <label for="old-password" class="form-label">Old Password</label>
-                                <input name="old-password" id="old-password" type="password" class="form-control" placeholder="Old Password">
+                                <label for="old_password" class="form-label">Old Password</label>
+                                <input name="old_password" id="old_password" type="password" class="form-control" placeholder="Old Password">
                             </div>
                             <div class="form-group">
                                 <label for="password" class="form-label">Password</label>
@@ -131,30 +132,65 @@
                             </div>
                     </div>
                     <div class="card-footer">
+                        @csrf
                         <button type="submit" class="card-primary btn btn-primary right">Save</button>
                     </div>
                 </div>
             </form>
 
             <!-- Professional Information -->
-            <form action="">
+            <form action="{{ route('profile.professional') }}" method="post">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Professional Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="name" class="form-label">Designation</label>
-                            <input name="name" id="name" type="text" class="form-control" placeholder="Name">
+                            <label for="designation" class="form-label">Designation</label>
+                            <input name="designation" id="designationname" value="{{ old('designation', $user->information->designation) }}" type="text" class="form-control" placeholder="Designation">
                         </div>
                         <div class="form-group">
                             <label for="company" class="form-label">Company</label>
-                            <select name="" id="company" class="form-control">
+                            <select name="company" id="company" class="form-control">
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="skills" class="form-label">Skills</label>
+                            <select name="skills[]" id="skills" class="form-control" multiple="multiple">
                             </select>
                         </div>
 
                     </div>
                     <div class="card-footer">
+                        @csrf
+                        <button type="submit" id="professional-btn" class="card-primary btn btn-primary right">Save</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Contact & Socal Information -->
+            <form action="{{ route('profile.contacts') }}" method="post">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Contact & Social Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="lives" class="form-label">Lives</label>
+                            <input name="lives" id="lives" value="{{ old('lives', $user->information->lives) }}" type="text" class="form-control" placeholder="Lives">
+                        </div>
+                        <div class="form-group">
+                            <label for="facebook" class="form-label">Facebook Link</label>
+                            <input name="facebook" id="facebook" value="{{ old('facebook', $user->information->facebook) }}" type="text" class="form-control" placeholder="Facebook Link">
+                        </div>
+                        <div class="form-group">
+                            <label for="linkedin" class="form-label">linkedin Link</label>
+                            <input name="linkedin" id="linkedin" value="{{ old('linkedin', $user->information->linkedin) }}" type="text" class="form-control" placeholder="linkedin Link">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        @csrf
                         <button type="submit" class="card-primary btn btn-primary right">Save</button>
                     </div>
                 </div>
@@ -175,6 +211,7 @@
         $(document).ready(function() {
             $('#company').select2({
                 placeholder: 'Select a company',
+                tags: [{"id": {{ $user->information->company?->id }}, "text": "{{ $user->information->company?->name }}"}],
                 ajax: {
                     url: '{{ route('api:companies') }}',
                     dataType: 'json',
@@ -200,9 +237,72 @@
                 }
             });
         }).on("select2:select", function(e) {
+            if (e.params.data.id != -1 ) {
+                return true;
+            }
 
-                console.log(e.params.data);
+            $('#company').prop('disabled', true);
+            $('#professional-btn').prop('disabled', true);
 
+            $.ajax({
+                url: '{{ route('api:company.store') }}',
+                type: 'POST',
+                data: {
+                    name: e.params.data.text,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    console.log(data);
+                    $('#company').prop('disabled', false);
+                    $('#professional-btn').prop('disabled', false);
+
+                    $('#company').append($('<option>', {
+                        value: data.id,
+                        text: data.name
+                    }));
+                    $('#company').val(data.id).trigger('change');
+                }
+            });
         });
+
+        @php
+            $skills = array_map(function($skill) {
+                return [
+                    'id' => $skill['id'],
+                    'text' => $skill['name'],
+                    'selected' => true
+                ];
+            }, $user->tags->toArray());
+        @endphp
+
+
+
+        $('#skills').select2({
+            multiple: true,
+            tags: @json($skills),
+            ajax: {
+                url: '{{ route('api:tags') }}',
+                dataType: 'json',
+                data: function(params) {
+                    // console.log(params);
+                    return {
+                        q: params.term
+                    };
+                },
+
+                processResults: function(data) {
+                    // console.log(data);
+                    return {
+                        results: $.map(data, function (item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                }
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+        })
     </script>
 @endpush

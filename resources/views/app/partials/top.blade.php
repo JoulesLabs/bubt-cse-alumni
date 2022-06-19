@@ -36,7 +36,9 @@
                                 </div>
                                 <div class="col-10">
                                     <div class="text-dark">Lorem ipsum</div>
-                                    <div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate hendrerit et.</div>
+                                    <div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate hendrerit
+                                        et.
+                                    </div>
                                     <div class="text-muted small mt-1">2h ago</div>
                                 </div>
                             </div>
@@ -76,11 +78,14 @@
                 </a>
 
                 <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                    <img src="../../../img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" /> <span class="text-dark">{{ Auth::user()?->name ? Auth::user()->name : 'Guest' }}</span>
+                    <img src="../../../img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1"/> <span
+                            class="text-dark">{{ Auth::user()?->name ? Auth::user()->name : 'Guest' }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="{{route('profile')}}"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
-                    <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
+                    <a class="dropdown-item" href="{{route('profile')}}"><i class="align-middle me-1"
+                                                                            data-feather="user"></i> Profile</a>
+                    <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help
+                        Center</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{route('logout')}}">Log out</a>
                 </div>
@@ -88,5 +93,4 @@
         </ul>
     </div>
 </nav>
-@include('components.flash-message')
 

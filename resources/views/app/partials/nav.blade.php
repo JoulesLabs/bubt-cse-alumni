@@ -5,7 +5,7 @@
 
     <ul class="sidebar-nav">
         <li class="sidebar-header">
-            Pages
+            Menu
         </li>
 
         <li class="sidebar-item">
@@ -18,6 +18,30 @@
             <a class="sidebar-link" href="/profile">
                 <i class="align-middle" data-feather="user"></i> <span class="  align-middle">Profile</span>
             </a>
+        </li>
+
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="/profile">
+                <i class="align-middle" data-feather="users"></i> <span class="  align-middle">Member Requests</span>
+            </a>
+        </li>
+
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="/profile">
+                <i class="align-middle" data-feather="briefcase"></i> <span class="  align-middle">Jobs</span>
+            </a>
+            <ul>
+                <li>
+                    <a class="sidebar-link" href="/profile">
+                        <i class="align-middle" data-feather="plus"></i> <span class="  align-middle">New</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="sidebar-link" href="/profile">
+                        <i class="align-middle" data-feather="list"></i> <span class="  align-middle">All</span>
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
 
