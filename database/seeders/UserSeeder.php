@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
         $user = User::query()->create([
             'name' => 'Mehedi Hasan Nahid',
             'email' => 'nahid.dns@gmail.com',
-            'password' => bcrypt('secret'),
+            'password' => 'secret',
             'mobile' => '01711122233',
             'status' => 1,
             'verified_at' => Carbon::now(),

@@ -44,7 +44,7 @@ class AuthController extends Controller
         try{
             $data = $request->validate([
                 'name' => 'required',
-                'email' => 'required|email|unique:users,email',
+                'email' => 'required|email|unique:users,email|unique:member_requests,email',
                 'password' => 'required',
                 'mobile' => 'required|min:11',
                 'intake' => 'required|integer',
@@ -52,13 +52,11 @@ class AuthController extends Controller
                 'reference' => 'required_with:reference_by' . ($request->input('reference_by') == 'email'? '|email|': '|') . 'exists:users,' . $request->input('reference_by'),
             ]);
 
-            $data['status'] = 0;
 
-            $user = $this->user->createUserWithInformation($request);
-            auth()->login($user, true);
-            $users = $this->user->adminGetAllUser();
+            $user = $this->user->createMemberJoiningRequest($request);
 
-            return view('dashboard', compact('users'))->with(msg("User created successfully!", MsgType::success));
+            return redirect()->back()->with(msg("We've accept your member request. You will be notified once your request is approved."));
+
         }catch(Exception $exception){
             return redirect()->back()->withInput()->with(msg($exception->getMessage(), MsgType::error));
         }

@@ -110,7 +110,7 @@
                         <div class="form-group">
                             <label for="passing_year" class="form-label">Passing Year</label>
                             <select name="passing_year" id="passing_year" class="form-select">
-                                <option>Select Passing Year</option>
+                                <option value="">Select Passing Year</option>
                                 @foreach(range(2005, date('Y')) as $year)
                                     <option value="{{ $year }}" {{ old('passing_year', $user->information->passing_year) == $year ? 'selected' : '' }}>{{ $year }}</option>
                                 @endforeach

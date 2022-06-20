@@ -37,4 +37,8 @@ Route::middleware('auth')->group(function(){
 
 
     Route::post('/api/companies', [CompanyController::class, 'store'])->name('api:company.store');
+
+    Route::get('/members/request', [DashboardController::class, 'getMemberRequests'])->name('members.request');
+    Route::get('/members/{id}/{status}', [DashboardController::class, 'refererChangeStatusPage'])->name('member.status.change');
+    Route::post('/members/{id}/{status}', [DashboardController::class, 'refererChangeStatus'])->name('member.status.change.submit');
 });

@@ -13,8 +13,10 @@ if (! function_exists('msg')) {
 }
 
 if (! function_exists('image_url')) {
-    function image_url(string $path, $noCache = false): string
+    function image_url(?string $path, $noCache = false): string
     {
+        if (is_null($path)) return '';
+
         if (filter_var($path, FILTER_VALIDATE_URL)) {
             return $path;
         }

@@ -21,4 +21,9 @@ class MemberRequest extends Model
         'shift',
         'referer_note',
     ];
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }

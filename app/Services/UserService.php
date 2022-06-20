@@ -73,9 +73,7 @@ class UserService extends Service
      */
     public function createUserWithInformation(Request $request): User
     {
-        $reference = User::where($request->input('reference_by'), $request->input('reference'))->firstOrFail();
         $data = $request->except('reference_by', 'reference', '_token');
-        $data['reference_id'] = $reference->id;
 
         try {
             DB::beginTransaction();
@@ -86,12 +84,6 @@ class UserService extends Service
                 'intake',
                 'shift',
             ]));
-
-            MemberRequest::query()->create([
-                'user_id' => $user->id,
-                'referer_id' => $reference->id,
-                'status' => 0,
-            ]);
 
             DB::commit();
 
@@ -109,9 +101,14 @@ class UserService extends Service
      */
     public function createMemberJoiningRequest(Request $request): MemberRequest
     {
+        $reference = User::where($request->input('reference_by'), $request->input('reference'))->first();
+        if (!$reference) {
+            throw new \Exception("Reference not found");
+        }
+
         $user = Auth::user();
         $data = $request->except('_token');
-        $data['user_id'] = $user->id;
+        $data['referer_id'] = $reference->id;
 
         return MemberRequest::query()->create($data);
     }

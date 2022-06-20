@@ -4,8 +4,6 @@ namespace App\Enums;
 
 enum UserShift: int
 {
-    use EnumToArray;
-
-    case DAY = 0;
-    case EVENING = 1;
+    case day = 1;
+    case evening = 2;
 }

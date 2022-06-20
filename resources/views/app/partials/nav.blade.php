@@ -22,8 +22,21 @@
 
         <li class="sidebar-item">
             <a class="sidebar-link" href="/profile">
-                <i class="align-middle" data-feather="users"></i> <span class="  align-middle">Member Requests</span>
+                <i class="align-middle" data-feather="users"></i> <span class="  align-middle">Members</span>
             </a>
+
+            <ul>
+                <li>
+                    <a class="sidebar-link" href="/profile">
+                        <i class="align-middle" data-feather="phone-incoming"></i> <span class="  align-middle">All Requests</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="sidebar-link" href="/profile">
+                        <i class="align-middle" data-feather="link"></i> <span class="  align-middle">My Referral</span>
+                    </a>
+                </li>
+            </ul>
         </li>
 
         <li class="sidebar-item">
