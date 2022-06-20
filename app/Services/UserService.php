@@ -103,6 +103,19 @@ class UserService extends Service
         }
     }
 
+    /**
+     * @param Request $request
+     * @return MemberRequest
+     */
+    public function createMemberJoiningRequest(Request $request): MemberRequest
+    {
+        $user = Auth::user();
+        $data = $request->except('_token');
+        $data['user_id'] = $user->id;
+
+        return MemberRequest::query()->create($data);
+    }
+
     public function checkAdmin()
     {
         return Auth::user()->admin;

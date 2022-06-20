@@ -15,9 +15,14 @@ return new class extends Migration
     {
         Schema::create('member_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
             $table->foreignId('referer_id')->nullable();
             $table->tinyInteger('status')->default(0);
+            $table->string('name')->index();
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('mobile')->index();
+            $table->tinyInteger('intake');
+            $table->tinyInteger('shift');
             $table->string('referer_note')->nullable();
             $table->timestamps();
         });

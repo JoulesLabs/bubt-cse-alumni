@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('passing_year')->nullable();
             $table->string('university_id')->nullable();
             $table->string('designation', 50)->nullable();
-            $table->string('alumni_role')->default(AlumniRole::member);
+            $table->string('alumni_role')->default(AlumniRole::member->value);
             $table->foreignId('company_id')->nullable();
             $table->string('lives', 50)->nullable();
             $table->string('facebook', 100)->nullable();

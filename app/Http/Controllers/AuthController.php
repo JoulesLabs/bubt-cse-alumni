@@ -13,8 +13,10 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -135,12 +137,23 @@ class AuthController extends Controller
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email,' . auth_user()->id,
                 'mobile' => 'required|min:11',
+                'university_id' => 'nullable|string',
+                'passing_year' => 'nullable|string',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
             ]);
 
-            $user = auth_user();
+            if ($request->hasFile('avatar')) {
+                $name = time() . '_'. Str::random(8) . '.' . $request->avatar->getClientOriginalExtension();
+                $request->file('avatar')->storeAs('images', $name);
 
-            $user->fill($data);
-            $user->save();
+                $data['avatar'] = 'images/' . $name;
+            }
+
+            $user = auth_user()->load('information');
+
+            $user->fill(Arr::only($data, ['name', 'email', 'mobile', 'avatar',]));
+            $user->information->fill(Arr::only($data, ['university_id', 'passing_year']));
+            $user->push();
         } catch (Exception $exception) {
             return redirect()->back()->withInput()->with(msg($exception->getMessage(), MsgType::error));
         }

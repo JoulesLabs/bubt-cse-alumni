@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body text-center">
                     <img
-                        src="{{ $user->avatar }}"
+                        src="{{ image_url($user->avatar) }}"
                         alt="Christina Mason"
                         class="img-fluid rounded-circle mb-2"
                         width="128"
@@ -85,7 +85,7 @@
 
         <div class="col-md-8 col-xl-9">
             <!-- Personal Information -->
-            <form action="{{ route('profile.personal') }}" method="post">
+            <form action="{{ route('profile.personal') }}" method="post" enctype="multipart/form-data">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">Personal Information</h5>
@@ -102,6 +102,31 @@
                         <div class="form-group">
                             <label for="mobile" class="form-label">Mobile</label>
                             <input name="mobile" id="mobile" value="{{ old('mobile', $user->mobile) }}" type="text" class="form-control" placeholder="Mobile">
+                        </div>
+                        <div class="form-group">
+                            <label for="university_id" class="form-label">Varsity ID</label>
+                            <input name="university_id" id="university_id" value="{{ old('university_id', $user->information->university_id) }}" type="text" class="form-control" placeholder="Varsity ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="passing_year" class="form-label">Passing Year</label>
+                            <select name="passing_year" id="passing_year" class="form-select">
+                                <option>Select Passing Year</option>
+                                @foreach(range(2005, date('Y')) as $year)
+                                    <option value="{{ $year }}" {{ old('passing_year', $user->information->passing_year) == $year ? 'selected' : '' }}>{{ $year }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="avatar" class="form-label">Avatar</label>
+                            <input name="avatar" id="avatar" type="file" class="form-control" accept=".jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Shift</label>
+                            <input value="{{ $user->information->shift }}" type="text" class="form-control" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Intake</label>
+                            <input value="{{ $user->information->intake }}" type="text" class="form-control" disabled>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -130,6 +155,7 @@
                                 <label for="password_confirmation" class="form-label">Confirm Password</label>
                                 <input name="password_confirmation" id="password_confirmation" type="password" class="form-control" placeholder="Confirm Password">
                             </div>
+
                     </div>
                     <div class="card-footer">
                         @csrf

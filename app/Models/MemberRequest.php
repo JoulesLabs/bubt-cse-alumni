@@ -13,6 +13,12 @@ class MemberRequest extends Model
         'user_id',
         'referer_id',
         'status',
-        'referer_note'
+        'name',
+        'email',
+        'password',
+        'mobile',
+        'intake',
+        'shift',
+        'referer_note',
     ];
 }
