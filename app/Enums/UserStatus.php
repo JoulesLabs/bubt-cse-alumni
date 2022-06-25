@@ -4,9 +4,7 @@ namespace App\Enums;
 
 enum UserStatus: int
 {
-    use EnumToArray;
-
-    case PENDING= 0;
-    case ACCEPT = 1;
-    case DECLINE = 2;
+    case draft= 0;
+    case approved = 1;
+    case blocked = 2;
 }

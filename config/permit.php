@@ -18,7 +18,7 @@ return [
         /*"module"  => ['create', 'update', 'delete'],*/
         'user' => ['create', 'update', 'delete'],
         'role' => ['create', 'update', 'delete'],
-        'alumni' => ['create', 'update', 'delete', 'verify'],
+        'alumni' => ['create', 'update', 'delete', 'list', 'verify'],
     ],
 
 

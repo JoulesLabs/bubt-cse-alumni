@@ -30,15 +30,19 @@
                             @php
                                 $statusClass = [
                                         \App\Enums\MemberRequestStatus::pending->value => 'bg-warning',
-                                        \App\Enums\MemberRequestStatus::referer_accept->value => 'bg-success',
-                                        \App\Enums\MemberRequestStatus::declined->value => 'bg-danger',
+                                        \App\Enums\MemberRequestStatus::referer_accepted->value => 'bg-success',
+                                        \App\Enums\MemberRequestStatus::referer_declined->value => 'bg-danger',
                                 ];
                             @endphp
                             <span class="badge {{ $statusClass[$member->status] }}">{{ \App\Enums\MemberRequestStatus::from($member->status)->name }}
                             </span></td>
                         <td class="d-none d-md-table-cell">
-                            <a href="" class="btn btn-success btn-sm">Accept</a>
-                            <a href="" class="btn btn-danger btn-sm">Decline</a>
+                            @if($member->status == \App\Enums\MemberRequestStatus::pending->value)
+                                <a href="{{ route('member.status.change', ['id' => $member->id, 'status' => 'accept']) }}"
+                                   class="btn btn-success btn-sm">Accept</a>
+                                <a href="{{ route('member.status.change', ['id' => $member->id, 'status' => 'decline']) }}"
+                                   class="btn btn-danger btn-sm">Decline</a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

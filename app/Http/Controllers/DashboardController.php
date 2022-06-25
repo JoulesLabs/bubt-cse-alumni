@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
@@ -33,7 +34,7 @@ class DashboardController extends Controller
     {
         $members = MemberRequest::select('id', 'name', 'mobile', 'status', 'intake', 'shift')
             ->where('referer_id', auth_user()->id)
-            ->whereIn('status', [MemberRequestStatus::pending, MemberRequestStatus::referer_accept, MemberRequestStatus::declined])
+            ->whereIn('status', [MemberRequestStatus::pending, MemberRequestStatus::referer_accepted, MemberRequestStatus::referer_declined])
             ->get();
 
         return \view('app.member.requests', compact('members'));
@@ -72,7 +73,7 @@ class DashboardController extends Controller
         }
 
         $statues = [
-            'accept' => MemberRequestStatus::referer_accept->value,
+            'accept' => MemberRequestStatus::referer_accepted->value,
             'decline' => MemberRequestStatus::declined->value
         ];
 
@@ -81,7 +82,7 @@ class DashboardController extends Controller
 
         $member->save();
 
-        return redirect()->route('members.request')->with(msg('Request status changed successfully.', MsgType::success));
+        return redirect()->route('members.request')->with(msg('Request '. $status . ' successfully.', MsgType::success));
 
     }
 }

@@ -26,4 +26,9 @@ class MemberRequest extends Model
     {
         $this->attributes['password'] = bcrypt($value);
     }
+
+    public function referer()
+    {
+        return $this->belongsTo(User::class, 'referer_id');
+    }
 }

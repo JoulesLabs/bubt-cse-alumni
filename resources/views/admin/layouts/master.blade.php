@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +10,7 @@
 </head>
 
 <body>
-@yield('modal')    
+@yield('modal')
 <div id="app">
     <div class="main-wrapper">
         @include('admin.partials.header')

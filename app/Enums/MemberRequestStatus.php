@@ -7,7 +7,8 @@ namespace App\Enums;
 enum MemberRequestStatus: int
 {
     case pending= 0;
-    case referer_accept = 2;
+    case referer_accepted = 2;
+    case referer_declined = 3;
     case approved = 1;
-    case declined = 3;
+    case declined = 4;
 }

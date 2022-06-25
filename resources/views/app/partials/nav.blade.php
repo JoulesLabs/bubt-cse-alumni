@@ -27,7 +27,7 @@
 
             <ul>
                 <li>
-                    <a class="sidebar-link" href="/profile">
+                    <a class="sidebar-link" href="{{ route('members.request') }}">
                         <i class="align-middle" data-feather="phone-incoming"></i> <span class="  align-middle">All Requests</span>
                     </a>
                 </li>
